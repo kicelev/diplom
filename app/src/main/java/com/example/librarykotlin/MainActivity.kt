@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.libraryndarray.NDArray
 import  com.example.libraryndarray.NDArrayFactory
+import com.example.libraryndarray.NDArrayMath
 import com.example.libraryndarray.Order
 import com.example.libraryndarray.Slice
 
@@ -241,6 +242,17 @@ class MainActivity : AppCompatActivity() {
 //          [4, 5, 6]
 //        ])
 //        */
-        
+
+        val vector1 = NDArrayFactory.create(arrayOf(1.0, 2.0, 3.0, 1.0, 2.0, 3.0, 1.0, 2.0), intArrayOf(2, 2, 2))
+        val vector2 = NDArrayFactory.create(arrayOf(1.0, 2.0, 3.0, 1.0, 2.0, 3.0, 1.0, 2.0), intArrayOf(2, 2, 2))
+
+        val math1 = NDArrayMath(vector1)
+        val math2 = NDArrayMath(vector2)
+
+        println("Vector addition:")
+        println((math1 + math2).getData().contentToString()) // [5.0, 7.0, 9.0]
+
+        println("\nVector multiplication:")
+        println((math1 * math2).getData().contentToString()) // [4.0, 10.0, 18.0]
     }
 }

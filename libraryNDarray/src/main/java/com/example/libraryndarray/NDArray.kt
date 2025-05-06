@@ -250,57 +250,14 @@ class NDArray<T : Any> internal constructor(
         val newArray = java.lang.reflect.Array.newInstance(clazz.java, array.size) as Array<T>
 
         for (i in array.indices) {
-            val oldIndices = computeIndices(i, shape, storageOrder)
+            val oldIndices = linearToMultiIndex(i, shape, storageOrder)
             val newIndices = oldIndices.reversedArray()
-            val newLinearIndex = computeLinearIndex(newIndices, newShape, storageOrder) // Не меняем порядок хранения!
+            val newLinearIndex = multiToLinearIndex(newIndices, newShape, storageOrder) // Не меняем порядок хранения!
             newArray[newLinearIndex] = array[i]
         }
 
         return NDArray.create(newArray, newShape, clazz).apply {
             storageOrder = this.storageOrder
-        }
-    }
-
-    private fun computeIndices(linearIndex: Int, shape: IntArray, order: Order): IntArray {
-        val indices = IntArray(shape.size)
-        var remaining = linearIndex
-        when (order) {
-            Order.ROW_MAJOR -> {
-                for (i in shape.indices.reversed()) {
-                    indices[i] = remaining % shape[i]
-                    remaining /= shape[i]
-                }
-            }
-            Order.COLUMN_MAJOR -> {
-                for (i in shape.indices) {
-                    indices[i] = remaining % shape[i]
-                    remaining /= shape[i]
-                }
-            }
-        }
-        return indices
-    }
-
-    private fun computeLinearIndex(indices: IntArray, shape: IntArray, order: Order): Int {
-        return when (order) {
-            Order.ROW_MAJOR -> {
-                var index = 0
-                var stride = 1
-                for (i in indices.indices.reversed()) {
-                    index += indices[i] * stride
-                    stride *= shape[i]
-                }
-                index
-            }
-            Order.COLUMN_MAJOR -> {
-                var index = 0
-                var stride = 1
-                for (i in indices.indices) {
-                    index += indices[i] * stride
-                    stride *= shape[i]
-                }
-                index
-            }
         }
     }
 

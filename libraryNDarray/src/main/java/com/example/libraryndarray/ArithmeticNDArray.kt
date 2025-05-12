@@ -2,7 +2,7 @@ package com.example.libraryndarray
 
 class ArithmeticNDArray<T : Number>(
     private val ndArray: NDArray<T>
-) {
+): Operable<T>{
     init {
         when (ndArray.getClazz()) {
             Double::class, Float::class, Int::class, Long::class -> {}
@@ -10,10 +10,10 @@ class ArithmeticNDArray<T : Number>(
         }
     }
 
-    operator fun plus(other: ArithmeticNDArray<T>): NDArray<T> = elementWiseOperation(other) { a, b -> a + b }
-    operator fun minus(other: ArithmeticNDArray<T>): NDArray<T> = elementWiseOperation(other) { a, b -> a - b }
-    operator fun times(other: ArithmeticNDArray<T>): NDArray<T> = elementWiseOperation(other) { a, b -> a * b }
-    operator fun div(other: ArithmeticNDArray<T>): NDArray<T> = elementWiseOperation(other) { a, b ->
+    override operator fun plus(other: ArithmeticNDArray<T>): NDArray<T> = elementWiseOperation(other) { a, b -> a + b }
+    override operator fun minus(other: ArithmeticNDArray<T>): NDArray<T> = elementWiseOperation(other) { a, b -> a - b }
+    override operator fun times(other: ArithmeticNDArray<T>): NDArray<T> = elementWiseOperation(other) { a, b -> a * b }
+    override operator fun div(other: ArithmeticNDArray<T>): NDArray<T> = elementWiseOperation(other) { a, b ->
         require(b != 0.0) { "Division by zero" }
         a / b
     }

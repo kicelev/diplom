@@ -1,6 +1,6 @@
 package com.example.libraryndarray
 
-class NDArrayMath<T : Number>(
+class ArithmeticNDArray<T : Number>(
     private val ndArray: NDArray<T>
 ) {
     init {
@@ -10,16 +10,16 @@ class NDArrayMath<T : Number>(
         }
     }
 
-    operator fun plus(other: NDArrayMath<T>): NDArray<T> = elementWiseOperation(other) { a, b -> a + b }
-    operator fun minus(other: NDArrayMath<T>): NDArray<T> = elementWiseOperation(other) { a, b -> a - b }
-    operator fun times(other: NDArrayMath<T>): NDArray<T> = elementWiseOperation(other) { a, b -> a * b }
-    operator fun div(other: NDArrayMath<T>): NDArray<T> = elementWiseOperation(other) { a, b ->
+    operator fun plus(other: ArithmeticNDArray<T>): NDArray<T> = elementWiseOperation(other) { a, b -> a + b }
+    operator fun minus(other: ArithmeticNDArray<T>): NDArray<T> = elementWiseOperation(other) { a, b -> a - b }
+    operator fun times(other: ArithmeticNDArray<T>): NDArray<T> = elementWiseOperation(other) { a, b -> a * b }
+    operator fun div(other: ArithmeticNDArray<T>): NDArray<T> = elementWiseOperation(other) { a, b ->
         require(b != 0.0) { "Division by zero" }
         a / b
     }
 
     private inline fun elementWiseOperation(
-        other: NDArrayMath<T>,
+        other: ArithmeticNDArray<T>,
         noinline operation: (Double, Double) -> Double
     ): NDArray<T> {
         require(ndArray.getShape().contentEquals(other.ndArray.getShape())) {
@@ -36,7 +36,7 @@ class NDArrayMath<T : Number>(
     }
 
     private fun createDoubleResult(
-        other: NDArrayMath<T>,
+        other: ArithmeticNDArray<T>,
         operation: (Double, Double) -> Double
     ): NDArray<T> {
         val result = Array(ndArray.getData().size) { i ->
@@ -50,7 +50,7 @@ class NDArrayMath<T : Number>(
     }
 
     private fun createFloatResult(
-        other: NDArrayMath<T>,
+        other: ArithmeticNDArray<T>,
         operation: (Double, Double) -> Double
     ): NDArray<T> {
         val result = Array(ndArray.getData().size) { i ->
@@ -64,7 +64,7 @@ class NDArrayMath<T : Number>(
     }
 
     private fun createIntResult(
-        other: NDArrayMath<T>,
+        other: ArithmeticNDArray<T>,
         operation: (Double, Double) -> Double
     ): NDArray<T> {
         val result = Array(ndArray.getData().size) { i ->
@@ -78,7 +78,7 @@ class NDArrayMath<T : Number>(
     }
 
     private fun createLongResult(
-        other: NDArrayMath<T>,
+        other: ArithmeticNDArray<T>,
         operation: (Double, Double) -> Double
     ): NDArray<T> {
         val result = Array(ndArray.getData().size) { i ->
